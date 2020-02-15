@@ -1,0 +1,12 @@
+{
+    "name": "alamin/json-to-mysql",
+    "description": "A simpole JSON file importer for MySQL.",
+    "authors": [{
+        "name": "Al-Amin Firdows",
+        "email": "alaminfirdows@gmail.com"
+    }],
+    "require": {},
+    "autoload": {
+        "psr-4": {}
+    }
+}
