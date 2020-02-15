@@ -7,6 +7,8 @@
     }],
     "require": {},
     "autoload": {
-        "psr-4": {}
+        "psr-4": {
+            "AlaminFirdows\\JSONToMySql\\": "includes/"
+        }
     }
 }
