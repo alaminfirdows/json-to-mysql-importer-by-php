@@ -24,6 +24,7 @@ class Importer
 
     public function import($table = 'products')
     {
+        // TODO:: Insert relational data
         if ($productData = $this->_prepareData()) {
             $imported = false;
             foreach ($productData as $data) {
