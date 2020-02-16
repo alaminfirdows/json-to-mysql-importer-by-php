@@ -4,12 +4,19 @@ namespace AlaminFirdows\JSONToMySql;
 
 require_once 'vendor/autoload.php';
 
-use AlaminFirdows\JSONToMySql\Importer;
+if ('POST' === $_SERVER['REQUEST_METHOD']) {
+    $jsonFile = $_FILES['json_file'];
+    if ($jsonFile['tmp_name'] && $jsonData = file_get_contents($jsonFile['tmp_name'])) {
+        $data = (array) json_decode($jsonData);
 
-if ('POST' === $_SERVER['REQUEST_METHOD'] && $data = $_POST) {
-    $importer = new Importer($data);
-    if ($importer->check()) {
-        $importer->import();
+        $importer = new Importer($data);
+        if ($importer->check()) {
+            $result = $importer->import();
+        } else {
+            die('Invalid data format.');
+        }
+    } else {
+        die('Please select a json file.');
     }
 }
 
@@ -83,18 +90,59 @@ if ('POST' === $_SERVER['REQUEST_METHOD'] && $data = $_POST) {
         color: #ffffff;
         background-color: #009688;
     }
+
+    .result {
+        display: block;
+        padding: .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .result.success {
+        background: #43a047;
+        color: #fff;
+        border-color: #43a047;
+    }
+
+    .result.error {
+        background: #e53935;
+        color: #fff;
+        border-color: #e53935;
+    }
+
+    .result p {
+        margin: 0;
+    }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <form action="#" method="POST">
+        <?php if (isset($result) && true == $result) : ?>
+        <div class="result success">
+            <p>Imported.</p>
+        </div>
+        <?php elseif ((isset($result) && false == $result)) : ?>
+        <div class="result error">
+            <p>Someting wrong.</p>
+        </div>
+        <?php
+        endif;
+        unset($result);
+        ?>
+        <form action="#" method="post" enctype="multipart/form-data">
             <div class="form-group custom-file-input">
                 <label for="json_file">
                     <div class="form-control">
                         Select your JSON file
                     </div>
-                    <input type="file" name="json_file" id="json_file">
+                    <input type="file" name="json_file" id="json_file" require>
                 </label>
             </div>
 
